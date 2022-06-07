@@ -495,6 +495,7 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
               child: ScaleText(
                 textDelegate.accessAllTip,
                 style: context.themeData.textTheme.caption?.copyWith(
+                  color: context.themeData.iconTheme.color?.withOpacity(.5),
                   fontSize: 14,
                 ),
                 semanticsLabel: semanticsTextDelegate.accessAllTip,
