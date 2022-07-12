@@ -16,7 +16,7 @@ const Color themeColor = Color(0xff00bc56);
 String? packageVersion;
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
   );
@@ -24,6 +24,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -47,11 +49,6 @@ class MyApp extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const <Locale>[
-        Locale('zh'), // Chinese
-        // Locale('iw'), // Hebrew
-      ],
-      locale: const Locale('zh'),
     );
   }
 }

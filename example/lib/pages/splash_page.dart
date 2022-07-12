@@ -9,10 +9,10 @@ import '../main.dart';
 import 'home_page.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage();
+  const SplashPage({super.key});
 
   @override
-  _SplashPageState createState() => _SplashPageState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
 class _SplashPageState extends State<SplashPage> {
@@ -23,9 +23,10 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> init() async {
-    await PackageInfo.fromPlatform()
-        .then((PackageInfo p) => packageVersion = p.version)
-        .catchError((Object _) {});
+    try {
+      final PackageInfo info = await PackageInfo.fromPlatform();
+      packageVersion = info.version;
+    } catch (_) {}
     await Future<void>.delayed(const Duration(seconds: 1));
     if (mounted) {
       Navigator.of(context).pushReplacement(
