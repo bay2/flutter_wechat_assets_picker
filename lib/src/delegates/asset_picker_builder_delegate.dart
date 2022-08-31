@@ -997,7 +997,12 @@ class DefaultAssetPickerBuilderDelegate
                     ],
                   );
                 } else {
-                  child = loadingIndicator(context);
+                  child = Stack(
+                    children: [
+                      loadingIndicator(context),
+                      pathEntityListWidget(context),
+                    ],
+                  );
                 }
                 return AnimatedSwitcher(
                   duration: switchingPathDuration,
@@ -1623,7 +1628,18 @@ class DefaultAssetPickerBuilderDelegate
                 label: '${semanticsTextDelegate.viewingLimitedAssetsTip}, '
                     '${semanticsTextDelegate.changeAccessibleLimitedAssets}',
                 button: true,
-                onTap: PhotoManager.presentLimited,
+                onTap: () async {
+                  await PhotoManager.presentLimited();
+                  Future<void>.delayed(const Duration(milliseconds: 300),
+                      () async {
+                    await provider.getPaths();
+                    provider.getAssetsFromPath(0, provider.paths.first.path);
+                  });
+                  // Future<void>(() async {
+                  //   await provider.getPaths();
+                  //   await provider.getAssetsFromCurrentPath();
+                  // });
+                },
                 hidden: !isPermissionLimited,
                 focusable: isPermissionLimited,
                 excludeSemantics: true,
@@ -1645,7 +1661,15 @@ class DefaultAssetPickerBuilderDelegate
                             '${textDelegate.changeAccessibleLimitedAssets}',
                         style: TextStyle(color: interactiveTextColor(context)),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = PhotoManager.presentLimited,
+                          ..onTap = (() async {
+                            await PhotoManager.presentLimited();
+                            Future<void>.delayed(
+                                const Duration(milliseconds: 300), () async {
+                              await provider.getPaths();
+                              provider.getAssetsFromPath(
+                                  0, provider.paths.first.path);
+                            });
+                          }),
                       ),
                     ],
                   ),

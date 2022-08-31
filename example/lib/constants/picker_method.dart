@@ -254,22 +254,28 @@ class PickMethod {
       icon: '➕',
       name: 'Prepend special item',
       description: 'A special item will prepend to the assets grid.',
-      method: (BuildContext context, List<AssetEntity> assets) {
+      method: (BuildContext context, List<AssetEntity> assets) async {
+        final PermissionState permissionState =
+            await AssetPicker.permissionCheck();
         return AssetPicker.pickAssets(
           context,
           pickerConfig: AssetPickerConfig(
             maxAssets: maxAssetsCount,
             selectedAssets: assets,
+            limitedPermissionOverlayPredicate: (PermissionState state) =>
+                state == PermissionState.denied,
             specialItemPosition: SpecialItemPosition.prepend,
-            specialItemBuilder: (
-              BuildContext context,
-              AssetPathEntity? path,
-              int length,
-            ) {
-              return const Center(
-                child: Text('Custom Widget', textAlign: TextAlign.center),
-              );
-            },
+            specialItemBuilder: permissionState == PermissionState.limited
+                ? (
+                    BuildContext context,
+                    AssetPathEntity? path,
+                    int length,
+                  ) {
+                    return const Center(
+                      child: Text('Custom Widget', textAlign: TextAlign.center),
+                    );
+                  }
+                : null,
           ),
         );
       },

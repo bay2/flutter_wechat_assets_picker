@@ -318,6 +318,10 @@ class DefaultAssetPickerProvider
     );
 
     for (final AssetPathEntity pathEntity in list) {
+      if ((await pathEntity.assetCountAsync) == 0) {
+        continue;
+      }
+
       final int index = _paths.indexWhere(
         (PathWrapper<AssetPathEntity> p) => p.path.id == pathEntity.id,
       );
@@ -357,6 +361,7 @@ class DefaultAssetPickerProvider
       _currentAssets.addAll(list);
     }
     _hasAssetsToDisplay = currentAssets.isNotEmpty;
+    isAssetsEmpty = currentAssets.isEmpty;
     notifyListeners();
   }
 
